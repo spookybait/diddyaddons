@@ -18,7 +18,7 @@ function getLeap() {
     if (Settings().DoorOpener) {
         leapString = lastOpener;
     }
-
+// this might be the worst way to do this but i do not give a fuck
     if (Settings().PositionalFastLeap) {
         if (isPlayerInBox(113, 160, 48, 89, 100, 122)) {
             let leapClass = getNameByClass(Settings().S1Leap);
