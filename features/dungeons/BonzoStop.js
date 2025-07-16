@@ -1,7 +1,7 @@
 import Settings from "../../config"
 import { releaseMovementKeys, repressMovementKeys } from "../utils/PlayerUtils"
 
-// i stole this from cga
+// i stole this from cgy
 
 const KeyBinding = Java.type("net.minecraft.client.settings.KeyBinding");
 const jumpKey = Client.getMinecraft().field_71474_y.field_74314_A.func_151463_i()
