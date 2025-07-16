@@ -4,5 +4,5 @@
 	"version": "1.0.5",
 	"entry": "index.js",
 	 "description": "more like skidaddons Lol!", 
-	"requires": ["PogData", "Amaterasu"] 
+	"requires": ["PogData", "Amaterasu", "BloomCore", "RenderLibV2J"] 
 }
