@@ -22,13 +22,12 @@ register("playerInteract", (action) => {
         if (veloSum < 0.5 || !Keyboard.isKeyDown(forwardKey)) return
         releaseMovementKeys()
         jumpListener.register()
-        if (Settings().bonzoStopVelo) {
         Player.getPlayer().func_70016_h(x / 1.5, y, z / 1.5)
-}
 
-        Client.scheduleTask(Settings().bonzoStopVelo ? 0 : 1, repressMovementKeys)
 
-        Client.scheduleTask(Settings().bonzoStopVelo ? 1 : 2, () => {
+        Client.scheduleTask(0, repressMovementKeys)
+
+        Client.scheduleTask(1, () => {
             jumpListener.unregister()
             // Player.getPlayer().func_70016_h(x, y, z)
       })
