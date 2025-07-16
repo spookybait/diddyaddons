@@ -50,11 +50,6 @@ register("worldLoad", () => {
 	spawnedMobs = 0;
 });
 
-if (data.enabled) {
-	rotationTrigger.register();
-	trigger.register();
-}
-
 function onEntityDestroyed(mcEntity) {
 	if (!(mcEntity instanceof EntityArmorStand)) return;
 	const itemStack = mcEntity.func_82169_q(3);
