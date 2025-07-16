@@ -76,6 +76,17 @@ config
 })
 .addSwitch({
     category: "Dungeons",
+    configName: "AutoBloodCampRotations",
+    title: "Client Side",
+    description: "Whether or not Auto Blood Camp will rotate on the server side or client side. Turn on for client side rotations",
+    subcategory: "General",
+	shouldShow: settings => {
+	return settings.AutoBloodCamp
+	},
+})
+/*
+.addSwitch({
+    category: "Dungeons",
     configName: "AutoGrabPot",
     title: "Auto Grab Pot (does not work)",
     description: "Automatically opens potion bag and grabs a pot at the start of every run",
@@ -93,6 +104,7 @@ config
 	return settings.AutoGrabPot
 	},
 })
+
 .addSwitch({
     category: "Dungeons",
     configName: "BadPlayerAlert",
@@ -100,22 +112,13 @@ config
     description: "Alerts you when someone you have added to the list joins your party.",
     subcategory: "Party Finder",
 })
+*/
 .addSwitch({
     category: "Dungeons",
     configName: "bonzoStop",
     title: "Bonzo Stop",
     description: "Stops movement after clicking with bonzo staff for a short period",
     subcategory: "P3"
-})
-.addSwitch({
-    category: "Dungeons",
-    configName: "bonzoStopVelo",
-    title: "Bonzo Stop Velocity ",
-    description: "If enabled, divides velocity by 1.5 when using bonzo stop.",
-    subcategory: "P3",
-    shouldShow: settings => {
-	return settings.bonzoStop
-    },
 })
 .addSwitch({
     category: "Fast Leap",

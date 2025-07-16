@@ -9,9 +9,12 @@ export const C01PacketChatMessage = Java.type("net.minecraft.network.play.client
 export const C08PacketPlayerBlockPlacement = Java.type("net.minecraft.network.play.client.C08PacketPlayerBlockPlacement")
 export const S13PacketDestroyEntities = Java.type("net.minecraft.network.play.server.S13PacketDestroyEntities");
 export const C03PacketPlayer = Java.type("net.minecraft.network.play.client.C03PacketPlayer");
+export const C04PacketPlayerPosition = Java.type("net.minecraft.network.play.client.C03PacketPlayer$C04PacketPlayerPosition")
+export const C05PacketPlayerLook = Java.type("net.minecraft.network.play.client.C03PacketPlayer$C05PacketPlayerLook")
+export const C06PacketPlayerPosLook = Java.type("net.minecraft.network.play.client.C03PacketPlayer$C06PacketPlayerPosLook")
+export const S08PacketPlayerPosLook = Java.type("net.minecraft.network.play.server.S08PacketPlayerPosLook");
 export const C0APacketAnimation = Java.type("net.minecraft.network.play.client.C0APacketAnimation");
 export const S32PacketConfirmTransaction = Java.type("net.minecraft.network.play.server.S32PacketConfirmTransaction")
-export const S08PacketPlayerPosLook = Java.type("net.minecraft.network.play.server.S08PacketPlayerPosLook")
 export const MouseEvent = Java.type("net.minecraftforge.client.event.MouseEvent")
 
 export function leftClick() {

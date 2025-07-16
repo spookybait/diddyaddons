@@ -24,7 +24,6 @@ register("playerInteract", (action) => {
         jumpListener.register()
         Player.getPlayer().func_70016_h(x / 1.5, y, z / 1.5)
 
-
         Client.scheduleTask(0, repressMovementKeys)
 
         Client.scheduleTask(1, () => {
