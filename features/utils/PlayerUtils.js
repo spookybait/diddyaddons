@@ -15,7 +15,11 @@ export const C06PacketPlayerPosLook = Java.type("net.minecraft.network.play.clie
 export const S08PacketPlayerPosLook = Java.type("net.minecraft.network.play.server.S08PacketPlayerPosLook");
 export const C0APacketAnimation = Java.type("net.minecraft.network.play.client.C0APacketAnimation");
 export const S32PacketConfirmTransaction = Java.type("net.minecraft.network.play.server.S32PacketConfirmTransaction")
+
 export const MouseEvent = Java.type("net.minecraftforge.client.event.MouseEvent")
+
+export const EntityArmorStand = Java.type("net.minecraft.entity.item.EntityArmorStand");
+
 
 export function leftClick() {
     const leftClickMethod = Client.getMinecraft().getClass().getDeclaredMethod("func_147116_af", null)

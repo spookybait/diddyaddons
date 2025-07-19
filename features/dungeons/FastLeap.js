@@ -125,6 +125,3 @@ register("chat", (player, message) => {
     leapUtils.autoLeap(leapString);
 }).setCriteria(/(\w+) completed a device! \((.*?)\)/);
 
-register("command", (arg1, arg2, arg3, arg4, arg5, arg6) => {
-	console.log(isPlayerInBox(arg1, arg2, arg3, arg4, arg5, arg6))
-}).setName("testleap")
