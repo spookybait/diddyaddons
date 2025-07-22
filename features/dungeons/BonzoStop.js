@@ -1,5 +1,5 @@
 import Settings from "../../config"
-import { releaseMovementKeys, repressMovementKeys } from "../utils/PlayerUtils"
+import { releaseMovementKeys, repressMovementKeys, getHeldItemID } from "../utils/PlayerUtils"
 
 // i stole this from cgy
 
@@ -12,11 +12,10 @@ register("playerInteract", (action) => {
     if (!Settings().bonzoStop) return
     if (action.toString() !== "RIGHT_CLICK_EMPTY") return
 	if (!Player.asPlayerMP().isOnGround()) return
-    if (Player.getPlayer().field_71075_bZ.func_75094_b() < 0.05) return // Return if speed is too low
+    if (Player.getPlayer().field_71075_bZ.func_75094_b() < 0.2) return // Return if speed is too low
     //if (!Player.isSprinting()) return // Return if you aren't sprinting because bonzo should work then because you're so slow
-    //if (Player.getPitch() < 30) return // Make sure you're looking down
-
-       if (Player.getHeldItem()?.getName().includes("Bonzo's Staff")) {
+    if (Player.getPitch() < 0) return // Make sure you're looking down
+       if (getHeldItemID() == "STARRED_BONZO_STAFF" || getHeldItemID() == "BONZO_STAFF") {
         const [x, y, z] = [Player.getMotionX(), Player.getMotionY(), Player.getMotionZ()]
         const veloSum = Math.sqrt(x * x + z * z) // Sum of velocity
         if (veloSum < 0.3 || !Keyboard.isKeyDown(forwardKey)) return

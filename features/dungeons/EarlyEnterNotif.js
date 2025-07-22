@@ -34,21 +34,37 @@ function formatMessage(msg) {
     return "";
 }
 
-const showTitle = (name, msg) => {
-    const formattedMsg = formatMessage(msg);
+function formatMessagetest(msg) {
+    const lowerCaseMsg = msg.toLowerCase();
 
+    let regex = /\b(early enter|pre enter|ee|pre|early entry) *([234])\b/i
+	let matches = regex.exec(lowerCaseMsg)
+	if (lowerCaseMsg.includes("at core")) return "4";
+	if (!matches) return "";
+	console.log(matches[2])
+
+    return matches[2];
+}
+
+register("command", (msg) => {
+	console.log(formatMessagetest(msg))
+}).setName("eetest")
+
+const showTitle = (name, msg) => {
+    const formattedMsg = formatMessagetest(msg);
+	console.log(formattedMsg)
     if (formattedMsg !== "") {
-        let titleStyle = Settings.titleStyle === 0 ? "Pre Enter" : "Early Enter";  // Adjusted to match selector options order
-        currentTitle.title = `&e${name} is At ${titleStyle} ${formattedMsg}`;
-        if (msg.includes("!")) {
-            currentTitle.title += "!!";
-        } else {
-            currentTitle.title += "!";
-        }
+		if (formattedMsg == "4") currentTitle.title = `&e${name} is At Core`;
+        else currentTitle.title = `&e${name} is At Early Enter ${formattedMsg}`;
+        
         currentTitle.time = 2500;
         started = Date.now();
-        World.playSound("random.orb", 3, 0.5);
+		  	try {
+        new net.minecraft.network.play.server.S29PacketSoundEffect("random.orb", Player.getX(), Player.getY(), Player.getZ(), 2, 0.5).func_148833_a(Client.getConnection())
+			} catch (e) { 
+				console.log(e)
     }
+	}
 };
 
 register("chat", (rank, name, msg) => {

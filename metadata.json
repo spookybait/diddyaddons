@@ -1,7 +1,7 @@
 {
 	"name": "diddyaddons",
 	"creator": "spookybait",
-	"version": "1.0.7",
+	"version": "1.0.8",
 	"entry": "index.js",
 	 "description": "more like skidaddons Lol!", 
 	"requires": ["PogData", "Amaterasu", "BloomCore", "RenderLibV2J"] 

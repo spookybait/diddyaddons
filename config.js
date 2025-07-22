@@ -78,7 +78,7 @@ config
     category: "Dungeons",
     configName: "AutoBloodCampRotations",
     title: "Client Side",
-    description: "Whether or not Auto Blood Camp will rotate on the server side or client side. Turn on for client side rotations",
+    description: "Shows rotations on your client",
     subcategory: "General",
 	shouldShow: settings => {
 	return settings.AutoBloodCamp
@@ -289,6 +289,37 @@ config
     configName: "SingleplayerJerrychine",
     title: "Jerry-chine",
     description: "Simulates Jerry-chine in singleplayer",
+    subcategory: "Simulation"
+})
+.addSwitch({
+    category: "Singleplayer",
+    configName: "SingleplayerTerminals",
+    title: "Terminals",
+    description: "Opens a terminal when you click on a command block in singleplayer, Requires Odin",
+    subcategory: "Simulation"
+})
+.addSwitch({
+    category: "Singleplayer",
+    configName: "SimonSays",
+    title: "Simon Says",
+    description: "Simulates First device in P3 (only works with an f7 world download rn sorry)",
+    subcategory: "Simulation"
+})
+.addSwitch({
+    category: "Singleplayer",
+    configName: "ssSkip",
+    title: "Simon Says Skip",
+    description: "Turn on for SS Skip",
+    subcategory: "Simulation",
+		shouldShow: settings => {
+	return settings.SimonSays
+	},
+})
+.addSwitch({
+    category: "Singleplayer",
+    configName: "CreativeEnderPearls",
+    title: "Creative Ender Pearls",
+    description: "Allows you to throw Ender Pearls in creative mode and attempts to simulate Hypixel Ender Pearls",
     subcategory: "Simulation"
 })
 .addSwitch({
