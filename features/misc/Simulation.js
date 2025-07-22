@@ -103,6 +103,7 @@ const enderPearlFix = register("packetReceived", (packet, event) => {
 	(Math.floor(packet.func_148928_d())) + 0.5,
 	(Math.floor(packet.func_148933_e())) + 0.5
 	)})
+	enderPearlFix.unregister()
 }).setFilteredClass(S08PacketPlayerPosLook).unregister()
 
 
