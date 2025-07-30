@@ -337,6 +337,44 @@ config
     subcategory: "P5"
 })
 .addSwitch({
+    category: "Dungeons",
+    configName: "LBMacro",
+    title: "Last Breath Macro",
+    description: "Automatically releases Last Breath after a certain amount of client/server ticks. Left click to fire",
+    subcategory: "P5"
+})
+.addSlider({
+    category: "Dungeons",
+    configName: "LBTicks",
+    title: "Ticks",
+    description: "How many ticks to wait to release.",
+    subcategory: "P5",
+	options: [5, 20],
+    value: 8,
+    shouldShow: settings => {
+	return settings.LBMacro
+    },
+})
+.addDropDown({
+    configName: "LBTickType",
+    title: "Tick Type",
+    description: "Whether or not to use client or server ticks",
+    category: "Dungeons",
+    subcategory: "P5",
+    options: ["Client", "Server"],
+    value: 0,
+	shouldShow: settings => {
+	return settings.LBMacro
+    },
+})
+.addSwitch({
+    category: "Dungeons",
+    configName: "AutoDebuff",
+    title: "Auto Debuff Swap",
+    description: "Auto swaps to Ice Spray and then Soul Whip/Flaming Flay upon a dragon spawning.",
+    subcategory: "P5"
+})
+.addSwitch({
     category: "QoL",
     configName: "QuickBackpackBind",
     title: "Quick Backpack Bind",

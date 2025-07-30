@@ -7,6 +7,7 @@ import "./features/dungeons/SwapStonk"
 import "./features/dungeons/BonzoStop"
 import "./features/dungeons/EarlyEnterNotif"
 import "./features/dungeons/StackSpots"
+import "./features/dungeons/LBMacro"
 //import "./features/dungeons/AutoGrabPot"
 import "./features/kuudra/Crateprio.js"
 import "./features/qol/QuickBackpackBind"
@@ -26,7 +27,6 @@ import "./features/utils/PlayerUtils"
    Settings().getConfig().openGui()
 
 }).setName("diddy");
-
 
 /*
 STUFF TO DO

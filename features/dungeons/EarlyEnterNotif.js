@@ -41,18 +41,12 @@ function formatMessagetest(msg) {
 	let matches = regex.exec(lowerCaseMsg)
 	if (lowerCaseMsg.includes("at core")) return "4";
 	if (!matches) return "";
-	console.log(matches[2])
 
     return matches[2];
 }
 
-register("command", (msg) => {
-	console.log(formatMessagetest(msg))
-}).setName("eetest")
-
 const showTitle = (name, msg) => {
     const formattedMsg = formatMessagetest(msg);
-	console.log(formattedMsg)
     if (formattedMsg !== "") {
 		if (formattedMsg == "4") currentTitle.title = `&e${name} is At Core`;
         else currentTitle.title = `&e${name} is At Early Enter ${formattedMsg}`;

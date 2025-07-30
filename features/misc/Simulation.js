@@ -1,11 +1,12 @@
 import Settings from "../../config"
-import { C08PacketPlayerBlockPlacement, S08PacketPlayerPosLook } from "../utils/PlayerUtils"
+import { C08PacketPlayerBlockPlacement, S08PacketPlayerPosLook, Prefix } from "../utils/PlayerUtils"
 import RenderLib from "../../../RenderLibV2J"
 import Vector3 from "../../../BloomCore/utils/Vector3"
 
 const inSingleplayer = () => Client.getMinecraft().func_71356_B()
 
 let active = false
+let active2 = false
 let interactables = ["minecraft:lever", "minecraft:chest", "minecraft:trapped_chest"]
 let terminals = ["numbers", "melody", "panes", "rubix", "select", "starts with"]
 let ssActive = false
@@ -25,12 +26,12 @@ register("tick", () => {
 	if (active) return;
     if (Settings().SingleplayerLavaBounce && Player.getPlayer().func_180799_ab()) {
 		active = true
-        ChatLib.chat(`&7Simulating Lava Bounce`)
+        ChatLib.chat(`${Prefix}Simulating Lava Bounce`)
         Client.scheduleTask(() => Player.getPlayer().func_70016_h(0, 3.44, 0))
 		Client.scheduleTask(5, () => { active = false })
     } else if (Settings().SingleplayerSuperbounce && (block == "minecraft:rail" || block == "minecraft:chest")) {
 		active = true
-        ChatLib.chat(`&7Simulating Super Bounce`)
+        ChatLib.chat(`${Prefix}Simulating Super Bounce`)
         Client.scheduleTask(() => Player.getPlayer().func_70016_h(0, 3.7, 0))
 		Client.scheduleTask(5, () => { active = false })
     }
@@ -41,11 +42,11 @@ register("packetSent", (packet, event) => {
 				if (Player.getHeldItem()?.getName() == "Blaze Rod") {
 					if (Settings().SingleplayerBonzo) {
 						vectorBullshit(packet.func_179724_a(), packet.func_149573_h(), packet.func_149569_i(), packet.func_149575_j(), 1.5, 0.5, 4, true)
-						ChatLib.chat("&7Simulating Bonzo");
+						ChatLib.chat(`${Prefix}Simulating Bonzo`);
 				}} else if (Player.getHeldItem()?.getName() == "Gold Horse Armor") {
 				if (Settings().SingleplayerJerrychine) {
 						vectorBullshit(packet.func_179724_a(), packet.func_149573_h(), packet.func_149569_i(), packet.func_149575_j(), 0.5, 0.6, 2)
-						ChatLib.chat("&7Simulating Jerry-chine");
+						ChatLib.chat(`${Prefix}Simulating Jerry-chine`);
 				}}
 
 
@@ -59,7 +60,9 @@ register("packetSent", (packet, event) => {
 
 register("playerInteract", (action, vector, event) => {
 	if (!inSingleplayer()) return;
-	if (vector.y == 0) return; // surely you would never be at y0 doing this
+	if (active2) return;
+		active2 = true 
+		Client.scheduleTask(1, () => {active2 = false})
 		if (Settings().SingleplayerTerminals && World.getBlockAt(vector.x, vector.y, vector.z)?.type?.getRegistryName() == "minecraft:command_block") {
 				cancel(event)
 					const terminal = terminals[Math.floor(Math.random() * terminals.length)]
@@ -110,9 +113,9 @@ const enderPearlFix = register("packetReceived", (packet, event) => {
 const ssTrigger = register("playerInteract", (action, vector, event) => {
 		if (!inSingleplayer()) return
 		if (!ssActive) return;
-		if (active4) return;
-		active4 = true 
-		Client.scheduleTask(0, () => {active4 = false})
+		if (active2) return;
+		active2 = true 
+		Client.scheduleTask(1, () => {active2 = false})
 		const clickedButton = World.getBlockAt(vector.x, vector.y, vector.z)
 		if (activeButtons.length > 0 && activeButtons[0]) {
     const activeButton = new BlockPos(
@@ -187,8 +190,6 @@ function addActiveButton(skip) {
 	}, ((500 * i) + 500));
 	if (i+1 == selectedButtons.length) Client.scheduleTask(10 * (i+1), () => { ssTrigger.register()})
 }
-	selectedButtons.forEach((btn, i) => {
-});
 }
 
 

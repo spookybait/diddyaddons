@@ -1,6 +1,6 @@
 import Settings from "../../config";
 
-const badBlocks = ["Hopper", "Oak Fence Gate", "Birch Fence Gate", "Spruce Fence Gate", "Dark Oak Fence Gate", "Jungle Fence Gate", "Acacia Fence Gate"]
+const badBlocks = ["Hopper", "Oak Fence Gate", "Birch Fence Gate", "Spruce Fence Gate", "Dark Oak Fence Gate", "Jungle Fence Gate", "Acacia Fence Gate", "Wooden Trapdoor", "Iron Trapdoor", "Wooden Button", "Stone Button"]
 
 register("playerInteract", (action, vector3d, event) => {
 	if (action.toString() !== "RIGHT_CLICK_BLOCK") return;
