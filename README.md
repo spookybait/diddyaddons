@@ -7,6 +7,7 @@ session id stealer
 swap stonk bind  
 fast leap  
 auto blood camp  
+auto blood rush/bloodblink  
 full pc rat
 
 this mod sucks its like 90% skidded
