@@ -1,4 +1,4 @@
-import RenderLib from "RenderLibV2J"
+
 
 export function getDoors() {
 	// east west
@@ -33,3 +33,4 @@ export function checkDoor(x, z) {
 		if (block.getMetadata() != 14) return false;
 		return true;
 }
+
