@@ -3,7 +3,6 @@ import { getDoors, getMiddleofBlood } from "../utils/MapUtils"
 import { getDistance2D, getDistance, calcYawPitch, Prefix, snapTo, S08PacketPlayerPosLook, swapToItem, swapToItemSbID, rightClick, C08PacketPlayerBlockPlacement, S08PacketPlayerPosLook, scheduleTask, C09PacketHeldItemChange, useAotv, S03PacketTimeUpdate} from "../utils/Utils"
 import { doPearlclip } from "../utils/pearlclip"
 import Listener from "../utils/Listeners"
-import RenderLib from "RenderLibV2J"
 
 //const inSingleplayer = () => Client.getMinecraft().func_71356_B()
 let doorFound = false
@@ -187,6 +186,7 @@ const inBlood = register("step", () => {
 	ChatLib.chat(`${Prefix}Blood rush done!`)
 	renderHud.unregister()
 }).setFps(1).unregister()
+
 
 
 
