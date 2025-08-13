@@ -1,5 +1,5 @@
 import Settings from "../../config"
-import { releaseMovementKeys, repressMovementKeys, getHeldItemID } from "../utils/PlayerUtils"
+import { releaseMovementKeys, repressMovementKeys, getHeldItemID } from "../utils/Utils"
 
 // i stole this from cgy
 

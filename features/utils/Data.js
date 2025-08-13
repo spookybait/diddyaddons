@@ -16,7 +16,8 @@ export const data = new PogObject(
     armorset: "",
     // funny
     funny: false,
-	skin: false,
+	lcmac: false,
+	lcmacFixed: false,
     // bad players.
     badplayers: [],
 	hudTextCoords: {

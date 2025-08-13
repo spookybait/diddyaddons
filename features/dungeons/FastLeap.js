@@ -1,7 +1,7 @@
 import Settings from "../../config";
 import leapHelper from "../utils/leapUtils"
 import leapUtils from "../utils/leapUtils"
-import { isPlayerInBox, rightClick, MouseEvent, getHeldItemID, getNameByClass, removeUnicode, Prefix } from "../utils/PlayerUtils";
+import { isPlayerInBox, rightClick, MouseEvent, getHeldItemID, getNameByClass, removeUnicode, Prefix } from "../utils/Utils";
 
 let lastOpener
 

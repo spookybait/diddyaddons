@@ -1,5 +1,5 @@
 import { data } from "../utils/Data";
-import { C01PacketChatMessage } from "../utils/PlayerUtils"
+import { C01PacketChatMessage, C0APacketAnimation, Prefix } from "../utils/Utils"
 let cooldown = true
 let timeout = false
 
@@ -19,6 +19,13 @@ register("command", () => {
 	if (data.funny) ChatLib.chat("§r§9Party §8> §b[MVP§3+§b] SpookyBait§f: §rdiddyaddons SAVED me 5 seconds in THAT room!!!§r");
 	
 }).setName("funny")
+
+register("command", () => {
+	Client.scheduleTask(0, () => {
+		Client.sendPacket(new C08PacketPlayerBlockPlacement(Player.getHeldItem()?.getItemStack()));	
+		Client.sendPacket(new C08PacketPlayerBlockPlacement(Player.getHeldItem()?.getItemStack()));
+	})
+}).setName("mosquito")
 
 
 register("playerInteract", (action, player, event) => {
@@ -52,6 +59,7 @@ register("packetSent", (packet, event) => {
 	  ChatLib.command(`pc [Skyblocker] We are at ${crypts} of 5 Crypts `)
   }
 }).setFilteredClass(C01PacketChatMessage)
+
 
 
 /*

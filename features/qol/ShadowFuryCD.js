@@ -1,6 +1,6 @@
 import Settings from "../../config";
 import { data } from "../utils/Data"
-import { S32PacketConfirmTransaction } from "../utils/PlayerUtils"
+import { S32PacketConfirmTransaction } from "../utils/Utils"
 
 
 const sfcdHud = new Gui()

@@ -1,4 +1,4 @@
-import {Prefix, S2DPacketOpenWindow, S2FPacketSetSlot, sendWindowClick, rightClick } from "./PlayerUtils"
+import {Prefix, S2DPacketOpenWindow, S2FPacketSetSlot, sendWindowClick, rightClick } from "./Utils"
 
 export default new class leapHelper {
     constructor() {
@@ -18,7 +18,7 @@ export default new class leapHelper {
 
             if (!windowID || !itemStack || !slot) return;
             if (slot > 35) {
-                ChatLib.chat(Prefix + "&aCould not find &c" + this._currentLeap())
+                ChatLib.chat(Prefix + "Could not find &c" + this._currentLeap())
                 this._reloadGUI()
                 return;
             }; 
@@ -28,7 +28,7 @@ export default new class leapHelper {
             const itemName = item?.getName()?.removeFormatting()?.toLowerCase();
             if (itemName !== this._currentLeap()?.toLowerCase()) return;
             sendWindowClick(windowID, slot, 0, 0)
-            ChatLib.chat(Prefix + "&aLeaping to &c" + this._currentLeap())
+            ChatLib.chat(Prefix + "Leaping to &c" + this._currentLeap())
             this._reloadGUI()
 
         }).setFilteredClass(S2FPacketSetSlot);

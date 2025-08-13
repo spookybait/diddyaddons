@@ -1,5 +1,5 @@
 import Settings from "../../config"
-import { swapToItem, rightClick, getClass } from "../utils/PlayerUtils"
+import { swapToItem, rightClick, getClass } from "../utils/Utils"
 
 register("chat", () => {
 	if(!Settings().AutoRag) return;

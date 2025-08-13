@@ -1,6 +1,5 @@
-/// <reference types="../CTAutocomplete" />
 import Settings from "../../config"
-import { snapTo, leftClick, S13PacketDestroyEntities, C03PacketPlayer, C0APacketAnimation, EntityArmorStand } from "../utils/PlayerUtils"
+import { snapTo, leftClick, S13PacketDestroyEntities, C03PacketPlayer, C0APacketAnimation, EntityArmorStand, getYawPitch } from "../utils/Utils"
 
 const dungeonUtils = Java.type("me.odinmain.utils.skyblock.dungeon.DungeonUtils")
 
@@ -77,10 +76,4 @@ function onEntityDestroyed(mcEntity) {
 	reportRotation = [yaw, pitch];
 }
 
-function getYawPitch(x, y, z) {
-	const length = Math.sqrt(x ** 2 + y ** 2 + z ** 2);
-	x /= length;
-	y /= length;
-	z /= length;
-	return [180 / Math.PI * -Math.atan2(x, z), 180 / Math.PI * (-Math.asin(y))];
-}
+

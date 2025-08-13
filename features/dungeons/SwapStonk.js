@@ -1,6 +1,6 @@
 import { data } from "../utils/Data";
 import Settings from "../../config";
-import { leftClick } from "../utils/PlayerUtils"
+import { leftClick, Prefix } from "../utils/Utils"
 
 
 // Bind key
@@ -13,12 +13,13 @@ let ticks = Settings().SwapStonkTicks
 const validPickaxeIDs = [278, 285, 257, 274, 270]
 const isInHotbar = (item) => { return (item < 8 && item >= 0) }
 
-swapKey.registerKeyPress( () => {
-	if (!Settings().SwapStonk || active) return
+register("tick", () => {
+	if (!swapKey.isKeyDown()) return;
+	if (!Settings().SwapStonk || active) return;
 	    active = true
     let pickaxeSlot = Player.getInventory().getItems().findIndex(item => validPickaxeIDs.includes(item?.getID()))
 	    if (!isInHotbar(pickaxeSlot)) {
-        ChatLib.chat("Pickaxe not found in your hotbar!")
+        ChatLib.chat(`${Prefix}Pickaxe not found in your hotbar!`)
         Client.scheduleTask(2, () => { active = false })
         return }
 		let originalItem = Player.getHeldItemIndex()

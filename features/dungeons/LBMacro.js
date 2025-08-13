@@ -1,7 +1,27 @@
 import Settings from "../../config"
-import { S32PacketConfirmTransaction, C08PacketPlayerBlockPlacement, C07PacketPlayerDigging, C09PacketHeldItemChange, S0FPacketSpawnMob, S13PacketDestroyEntities, S1CPacketEntityMetadata, MCBlockPos, EnumFacing, releaseRightClick, pressRightClick, MouseEvent, getHeldItemID, getDistance2D, isPlayerInBox, getClass, swapToItemSbID } from "../utils/PlayerUtils"
+import { data } from "../utils/Data"
+import { S32PacketConfirmTransaction, C08PacketPlayerBlockPlacement, C07PacketPlayerDigging, C09PacketHeldItemChange, S0FPacketSpawnMob, S1CPacketEntityMetadata, MCBlockPos, EnumFacing, releaseRightClick, pressRightClick, MouseEvent, getHeldItemID, getDistance2D, isPlayerInBox, getClass, swapToItemSbID, mc } from "../utils/Utils"
 import tick from "../utils/Listeners"
 
+let lcmacModule = null
+
+const lcmacFunctions = `
+export function enable() {
+	autoClicking = true
+	clicker()
+}
+export function disable() {
+	autoClicking = false
+}`
+
+if (FileLib.exists("lcmac", "metadata.json")) {
+	if (!data.lcmacFixed) {
+		FileLib.append("lcmac", "index.js", lcmacFunctions)
+		data.lcmacFixed = true
+		data.save()
+	}
+	lcmacModule = require("../../../lcmac/index");
+}
 let dragonsSpawned = 0
 let dragonsKilled = 0
 let safety = false
@@ -42,9 +62,7 @@ register(MouseEvent, (event) => {
 });
 
 register("command", () => {
-	Client.scheduleTask(0, () => { swapToItemSbID("ICE_SPRAY_WAND", "STARRED_ICE_SPRAY_WAND")})
-	Client.scheduleTask(2, () => { swapToItemSbID("SOUL_WHIP", "FLAMING_FLAY")})
-	// Client.scheduleTask(2, () => { swapToItemSbID("STARRED_MIDAS_SWORD", "DARK_CLAYMORE")})
+	if (data.lcmac && lcmacModule) lcmacModule.enable()
 }).setName("swaptest")
 
 register("worldLoad", () => {
@@ -74,10 +92,10 @@ const debuffTrigger = register("packetReceived", (packet, event) => {
 	if (packet.func_149025_e() !== 63) return;
 		if (getDistance2D(Player.getX(), Player.getZ(), entityX, entityZ) > 15) return;
 		const currentClass = getClass()
-			if (currentClass !== "Mage" && currentClass !== "Tank" && currentClass !== "Healer") return;
+		if (currentClass !== "Mage" && currentClass !== "Tank" && currentClass !== "Healer") return;
 			for (let i = 0; i < boxes.length; i++) {
 				if (isPlayerInBox(boxes[i].xMin, boxes[i].yMin, boxes[i].zMin, boxes[i].xMax, boxes[i].yMax, boxes[i].zMax)) {
-					if (safety) return; // it should never get to this point where you are either in 2 boxes or this triggers multiple times but who knows
+				if (safety) return; // it should never get to this point where you are either in 2 boxes or this triggers multiple times but who knows
 					safety = true 
 					Client.scheduleTask(10, () => { safety = false })
 					console.log(`Set dragonID to ${entityID}`)
@@ -86,9 +104,10 @@ const debuffTrigger = register("packetReceived", (packet, event) => {
 					dragonsSpawned++
 					Client.scheduleTask(0, () => { swapToItemSbID("ICE_SPRAY_WAND", "STARRED_ICE_SPRAY_WAND")})
 					if (currentClass === "Mage") { Client.scheduleTask(2, () => {
-					releaseRightClick()
-					swapToItemSbID("STARRED_MIDAS_SWORD", "DARK_CLAYMORE")})}
-					else Client.scheduleTask(2, () => { swapToItemSbID("SOUL_WHIP", "FLAMING_FLAY")})
+						eleaseRightClick()
+						swapToItemSbID("STARRED_MIDAS_SWORD", "DARK_CLAYMORE")
+							if (data.lcmac && lcmacModule) lcmacModule.enable()
+					})} else Client.scheduleTask(2, () => { swapToItemSbID("SOUL_WHIP", "FLAMING_FLAY")})
     }
 }
 }).setFilteredClass(S0FPacketSpawnMob).unregister()
@@ -102,27 +121,13 @@ const deathTrigger = register("packetReceived", (packet, event) => {
 	if (data.func_75669_b() <= 0) {
 		Client.scheduleTask(0, () => { 
 		releaseRightClick()
-		swapToItemSbID("STARRED_LAST_BREATH", "LAST_BREATH")
+		if (data.lcmac && lcmacModule) lcmacModule.disable()
 		})
 		dragonsKilled++
 		deathTrigger.unregister()
 	}
 	})
 }).setFilteredClass(S1CPacketEntityMetadata).unregister()
-/*
-const deathTrigger = register("entityDeath", (entity) => {	
-	if (!inP5) return; // should never happen
-	if (entity.getClassName() !== "EntityDragon") return;
-	const field1 = entity.class.getDeclaredField("entity");
-	field1.setAccessible(true);
-	const mcEntity = field1.get(entity)
-	console.log(mcEntity.func_145782_y(), dragonID)
-	if (!dragonID) return;
-	if (mcEntity.func_145782_y() !== dragonID) return;
-	Client.scheduleTask(0, () => { ChatLib.chat("Release right click!")})
-	dragonsKilled++
-}).unregister()
-*/
 
 const hotbarSwap = register("packetSent", () => {
 	console.log("swapped")
@@ -174,4 +179,4 @@ function release() {
 	Client.sendPacket(new C07PacketPlayerDigging(C07PacketPlayerDigging.Action.RELEASE_USE_ITEM, new MCBlockPos(0, 0, 0), EnumFacing.DOWN));
 }
 
-
+		

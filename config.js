@@ -84,6 +84,37 @@ config
 	return settings.AutoBloodCamp
 	},
 })
+.addSwitch({
+    category: "Dungeons",
+    configName: "AutoBloodRush",
+    title: "Auto Blood Rush",
+    description: "Teleports you to blood room upon dungeon start. Stand still at dungeon start so it doesnt break.",
+    subcategory: "General"
+})
+.addSlider({
+    category: "Dungeons",
+    configName: "AutoBRDeathTicks",
+    title: "Tick Delay",
+    description: "Delay before attempting to Auto Blood Rush to avoid death barrier",
+    subcategory: "General",
+	options: [1, 40],
+    value: 14,
+    shouldShow: settings => {
+	return settings.AutoBloodRush
+    },
+})
+.addSlider({
+    category: "Dungeons",
+    configName: "AutoBRPearls",
+    title: "Pearls to throw",
+    description: "How many extra pearls to throw when clipping up into blood",
+    subcategory: "General",
+	options: [1, 3],
+    value: 2,
+    shouldShow: settings => {
+	return settings.AutoBloodRush
+    },
+})
 /*
 .addSwitch({
     category: "Dungeons",
@@ -384,7 +415,7 @@ config
 .addSwitch({
     category: "QoL",
     configName: "sfcd",
-    title: "Shadow Fury Cooldown Display",
+    title: "Shadow Fury Ccooldown Display",
     description: "Shows Shadow Fury Cooldown, change location with /editsfcdhud",
     subcategory: "General"
 })
@@ -400,6 +431,13 @@ config
     configName: "NoHitDelay",
     title: "No Hit Delay",
     description: "Removes the hit delay when not clicking on an entity",
+    subcategory: "General"
+})
+.addSwitch({
+    category: "QoL",
+    configName: "MiningAbilityAlert",
+    title: "Mining Ability Alert",
+    description: "Plays a sound when your pickaxe ability comes off cooldown",
     subcategory: "General"
 })
 .addSwitch({
