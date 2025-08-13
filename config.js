@@ -115,6 +115,16 @@ config
 	return settings.AutoBloodRush
     },
 })
+.addSwitch({
+    category: "Dungeons",
+    configName: "AutoBloodRushPing",
+    title: "High Ping",
+    description: "Makes pearling into blood work on high ping, enable if you are above 150 ping",
+    subcategory: "General",
+	shouldShow: settings => {
+	return settings.AutoBloodRush
+    },
+})
 /*
 .addSwitch({
     category: "Dungeons",
@@ -389,7 +399,7 @@ config
 .addDropDown({
     configName: "LBTickType",
     title: "Tick Type",
-    description: "Whether or not to use client or server ticks",
+    description: "Whether to use client or server ticks",
     category: "Dungeons",
     subcategory: "P5",
     options: ["Client", "Server"],

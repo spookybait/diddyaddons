@@ -1,4 +1,4 @@
-import { S08PacketPlayerPosLook, snapTo, swapToItem, scheduleTask, rightClick } from "./Utils"
+import { S08PacketPlayerPosLook, snapTo, swapToItem, scheduleTask, rightClick, Prefix } from "./Utils"
 
 let yPos = 0
 export const registerPearlClip = (pos) => {
@@ -20,7 +20,10 @@ register("command", (dis) => {
 export function doPearlclip(number) { 
 	const distance = Number(number)
 	if (isNaN(distance)) return;
-	if ((Player.getY() - distance) > 40) return;
+  if (Player.getY() - distance > 40 || Player.getY() - distance < 3 || yPos > Player.getY()) {
+		ChatLib.chat(`${Prefix}Input a number between 3 and 40`)
+		return;
+	}
 	snapTo(Player.getYaw(), 90)
 	registerPearlClip(distance + 1)
 	swapToItem("Ender Pearl")
@@ -31,7 +34,7 @@ const pearlclip = register("packetReceived", (packet, event) => {
     scheduleTask(0, () => {
       if (event?.isCancelled()) return
         pearlclip.unregister()
-        ChatLib.chat(`Pearlclipped ${(Player.getY() - yPos).toFixed(2)} blocks down.`)
+        ChatLib.chat(`${Prefix}Pearlclipped ${(Player.getY() - yPos).toFixed(2)} blocks down.`)
         Player.getPlayer().func_70107_b(Player.getX(), yPos, Player.getZ())
         yPos = 0
     })

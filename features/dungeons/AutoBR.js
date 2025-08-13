@@ -1,8 +1,9 @@
 import Settings from "../../config"
 import { getDoors, getMiddleofBlood } from "../utils/MapUtils"
-import { getDistance2D, getDistance, calcYawPitch, Prefix, snapTo, S08PacketPlayerPosLook, swapToItem, swapToItemSbID, rightClick, C08PacketPlayerBlockPlacement, S08PacketPlayerPosLook, scheduleTask, C09PacketHeldItemChange, useAotv, S03PacketTimeUpdate} from "../utils/Utils"
+import { getDistance2D, getDistance, calcYawPitch, Prefix, snapTo, S08PacketPlayerPosLook, swapToItem, swapToItemSbID, rightClick, C08PacketPlayerBlockPlacement, S08PacketPlayerPosLook, scheduleTask, C09PacketHeldItemChange, useAotv } from "../utils/Utils"
 import { doPearlclip } from "../utils/pearlclip"
 import Listener from "../utils/Listeners"
+import RenderLib from "RenderLibV2J"
 
 //const inSingleplayer = () => Client.getMinecraft().func_71356_B()
 let doorFound = false
@@ -23,6 +24,7 @@ const unload = register("worldLoad", () => {
 	coords = []
 	doorFound = false
 	chainPearls = false
+	extraPearls = 0
 }).unregister()
 
 const dungeonEntered = register("worldUnload", () => {
@@ -61,7 +63,7 @@ const autoBRtrigger = register("chat", () => {
 	}, Settings().AutoBRDeathTicks * 50)
 
 }).setCriteria("Starting in 1 second.").setStart()
-
+/*
 register("command", () => {
 	doorFound = false
 	doorFinder.register()
@@ -75,19 +77,17 @@ register("command", (uses) => {
 	setTimeout( () => { ChatLib.command("ct simulate Starting in 1 second.", true)}, 5000)
 	
 }).setName("autobrtest")
-
+*/
 let running = false
-let delay = false
 register("chat", () => {
 	if (!Settings().AutoBloodRush) return;
 	snapTo(Player.getYaw(), 90)
 	if (doorFound) return;
 	if (running) return;
 	running = true
-	delay = true
 	scheduleTask(5, () => { running = false })
 	hudText.setString("Attempting to load more chunks.")
-	Listener.schedule(Settings().AutoBRDeathTicks, () => {
+	Listener.schedule(1, () => {
 	goToMiddle.register()
 	}, 50)
 }).setCriteria(Player.getName() + " is now ready!").setStart()
@@ -136,7 +136,7 @@ function tpToMiddle() {
 function tpOver() {
 	let aotvUses = getAotvUses(getDistance2D(Player.getX(), Player.getZ(), coords[0], coords[1]))
 	let [yaw, pitch] = calcYawPitch(coords[0], 70, coords[1])
-	scheduleTask(3, () => {
+	scheduleTask(1, () => {
 		useAotv(aotvUses, yaw, 3.5)
 		Listener.schedule(aotvUses, () => {
 			goUp()
@@ -144,30 +144,28 @@ function tpOver() {
 		//if (inSingleplayer) Listener.simulatePacket("net.minecraft.network.play.server.S08PacketPlayerPosLook", aotvUses, 120)
 	})
 }
-
+let extraPearls = 0
 function goUp() {
 	scheduleTask(1, () => {
 		useAotv(5, Player.getYaw(), -90)
-			Listener.schedule(5, () => {
-				scheduleTask(1, () => {
+			//Listener.schedule(5, () => {
+				scheduleTask(2, () => {
 				swapToItem("Ender Pearl")
 				extraPearls = Settings().AutoBRPearls
+				if (Settings().AutoBloodRushPing) {					
 				chainPearls = true
-				scheduleTask(2, () => { rightClick() } )
+				scheduleTask(1, () => { rightClick() })
+				} else {
+				for (i = 0; i < extraPearls; i++) {
+					scheduleTask(i + 1, () => { rightClick() })
+				} }
 				})
-			}, 40, "net.minecraft.network.play.server.S08PacketPlayerPosLook")
+			//}, 40, "net.minecraft.network.play.server.S08PacketPlayerPosLook")
 			//if (inSingleplayer) Listener.simulatePacket("net.minecraft.network.play.server.S08PacketPlayerPosLook", 5, 120)
 	})
 }
 
-register("command", () => {
-	Listener.schedule(5, () => {
-		ChatLib.chat("test")
-	}, 40, "net.minecraft.network.play.server.S08PacketPlayerPosLook")
-}).setName("scheduletest")
 
-
-let extraPearls = 0
 let chainPearls = false
 const pearlChainer = register("packetReceived", (packet, event) => {
 	if (!extraPearls) {
@@ -186,8 +184,6 @@ const inBlood = register("step", () => {
 	ChatLib.chat(`${Prefix}Blood rush done!`)
 	renderHud.unregister()
 }).setFps(1).unregister()
-
-
 
 
 

@@ -61,10 +61,6 @@ register(MouseEvent, (event) => {
 	} else firing = false;
 });
 
-register("command", () => {
-	if (data.lcmac && lcmacModule) lcmacModule.enable()
-}).setName("swaptest")
-
 register("worldLoad", () => {
 	inP5 = false
 	debuffTrigger.unregister()

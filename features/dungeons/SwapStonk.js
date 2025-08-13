@@ -1,6 +1,6 @@
 import { data } from "../utils/Data";
 import Settings from "../../config";
-import { leftClick, Prefix } from "../utils/Utils"
+import { leftClick, Prefix, swapToSlot, scheduleTask } from "../utils/Utils"
 
 
 // Bind key
@@ -20,16 +20,16 @@ register("tick", () => {
     let pickaxeSlot = Player.getInventory().getItems().findIndex(item => validPickaxeIDs.includes(item?.getID()))
 	    if (!isInHotbar(pickaxeSlot)) {
         ChatLib.chat(`${Prefix}Pickaxe not found in your hotbar!`)
-        Client.scheduleTask(2, () => { active = false })
+        scheduleTask(2, () => { active = false })
         return }
 		let originalItem = Player.getHeldItemIndex()
 if(pickaxeSlot == originalItem) 
 {
-	Client.scheduleTask(2, () => { active = false })
+	scheduleTask(2, () => { active = false })
 	return;
 }
-		Player.setHeldItemIndex(pickaxeSlot)
+		swapToSlot(pickaxeSlot)
 		leftClick()
-	Client.scheduleTask(ticks, () => { Player.setHeldItemIndex(originalItem)})
-    Client.scheduleTask(ticks + 1, () => { active = false })
+	scheduleTask(ticks, () => { swapToSlot(originalItem)})
+    scheduleTask(ticks + 1, () => { active = false })
 }).setPriority(Priority.HIGH)

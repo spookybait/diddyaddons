@@ -1,5 +1,4 @@
 
-
 export function getDoors() {
 	// east west
 	for (let dx = -25; dx > -186; dx += -32) {
@@ -33,4 +32,3 @@ export function checkDoor(x, z) {
 		if (block.getMetadata() != 14) return false;
 		return true;
 }
-

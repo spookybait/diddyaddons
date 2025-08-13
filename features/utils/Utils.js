@@ -33,6 +33,8 @@ export const EnumFacing = Java.type("net.minecraft.util.EnumFacing");
 
 const Mouse = Java.type("org.lwjgl.input.Mouse")
 
+let isSwapping = false
+
 export function leftClick() {
     const leftClickMethod = Client.getMinecraft().getClass().getDeclaredMethod("func_147116_af", null)
     leftClickMethod.setAccessible(true);
@@ -46,6 +48,21 @@ export function rightClick() {
 
 }
 
+export function setSwapping() {
+	isSwapping = true
+	Client.scheduleTask(0, () => { isSwapping = false })
+}
+
+export function swapToSlot(slot) {
+	if (slot < 0 || slot > 8) return;
+	if (isSwapping) {
+		ChatLib.chat(`${Prefix}uh oh you zero tick swapped you should be fine though`)
+			return;
+		}
+	setSwapping()
+	Player.setHeldItemIndex(slot)
+}
+
 export const swapToItem = (targetItemName) => {
     const itemSlot = Player?.getInventory()?.getItems()?.findIndex(item => { return item?.getName()?.toLowerCase()?.includes(targetItemName.toLowerCase()) })
     if (itemSlot === -1 || itemSlot > 7) {
@@ -53,6 +70,11 @@ export const swapToItem = (targetItemName) => {
         return
     } else {heldItem = Player.getHeldItemIndex() 
         if (heldItem == itemSlot) return;
+		if (isSwapping) {
+		ChatLib.chat(`${Prefix}uh oh you zero tick swapped you should be fine though`)
+			return;
+		}
+		setSwapping()
         Player.setHeldItemIndex(itemSlot)
     }
 }
@@ -64,6 +86,11 @@ export const swapToItemID = (targetItemID) => {
         return
     } else { heldItem = Player.getHeldItemIndex() 
         if(heldItem == itemSlot) return;
+		if (isSwapping) {
+		ChatLib.chat(`${Prefix}uh oh you zero tick swapped you should be fine though`)
+			return;
+		}
+		setSwapping()
         Player.setHeldItemIndex(itemSlot)
     }
 }
@@ -76,14 +103,23 @@ export const swapToItemSbID = (targetItemSbID, backup) => {
         return
     } else { heldItem = Player.getHeldItemIndex() 
         if(heldItem == itemSlot) return;
+		if (isSwapping) {
+		ChatLib.chat(`${Prefix}uh oh you zero tick swapped you should be fine though`)
+			return;
+		}
+		setSwapping()
         Player.setHeldItemIndex(itemSlot)
     }
 }
 let aotvsUsed = 0
 export function useAotv(uses, yaw = Player.getYaw(), pitch = Player.getPitch()) {
-	swapToItemSbID("ASPECT_OF_THE_VOID", "ASPECT_OF_THE_END")
+	let delay = 0
+	if (getHeldItemID() !== "ASPECT_OF_THE_VOID") {
+		swapToItemSbID("ASPECT_OF_THE_VOID")
+		delay = 1
+	}
 	snapTo(yaw, pitch)
-	scheduleTask(1, () => { for (i = 0; i < uses; i++) {
+	scheduleTask(delay, () => { for (i = 0; i < uses; i++) {
 		if (aotvsUsed > 50) return
 		aotvsUsed++
 		Client.sendPacket(new C08PacketPlayerBlockPlacement(Player.getHeldItem()?.getItemStack() ?? null)) 

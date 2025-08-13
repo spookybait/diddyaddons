@@ -94,21 +94,22 @@ register("playerInteract", (action, vector, event) => {
     let enderPearl = new net.minecraft.entity.item.EntityEnderPearl(world, event.entityPlayer)
 	if (!world.field_72995_K) {
 		world.func_72838_d(enderPearl)
-		//enderPearlFix.register()
+		enderPearlFix.register()
 	}
 })
-/*
+
 const enderPearlFix = register("packetReceived", (packet, event) => {
 	if(!inSingleplayer()) return;
 		if(!Settings().CreativeEnderPearls) return;
-	Client.scheduleTask(0, () => {Player.getPlayer().func_70107_b(
-	(Math.floor(packet.func_148932_c())) + 0.5,
-	(Math.floor(packet.func_148928_d())),
-	(Math.floor(packet.func_148933_e())) + 0.5
-	)})
+	let x =	(Math.floor(packet.func_148932_c())) + 0.5
+	let y =	(Math.round(packet.func_148928_d()))
+	let z =	(Math.floor(packet.func_148933_e())) + 0.5
+	Client.scheduleTask(0, () => {
+	Player.getPlayer().func_70107_b(x, y, z)
+	})
 	enderPearlFix.unregister()
-}).setFilteredClass(S08PacketPlayerPosLook).unregister()
-*/
+}).setFilteredClass(S08PacketPlayerPosLook).setPriority(Priority.HIGHEST).unregister()
+
 
 const ssTrigger = register("playerInteract", (action, vector, event) => {
 		if (!inSingleplayer()) return
