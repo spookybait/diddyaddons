@@ -26,11 +26,6 @@ const unload = register("worldLoad", () => {
 	chainPearls = false
 }).unregister()
 
-register("renderWorld", () => {
-	if (!coords) return;
-	RenderLib.drawInnerEspBox(coords[0] - 0.5 ?? 0, 70, coords[1] - 0.5 ?? 0, 1, 1, 1, 0, 0, 0.5, true)
-})
-
 const dungeonEntered = register("worldUnload", () => {
 	if (!Settings().AutoBloodRush) return;
 	setTimeout( () => { unload.register() }, 500)
@@ -192,6 +187,7 @@ const inBlood = register("step", () => {
 	ChatLib.chat(`${Prefix}Blood rush done!`)
 	renderHud.unregister()
 }).setFps(1).unregister()
+
 
 
 
