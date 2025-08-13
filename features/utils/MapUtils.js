@@ -33,25 +33,3 @@ export function checkDoor(x, z) {
 		if (block.getMetadata() != 14) return false;
 		return true;
 }
-register("renderWorld", () => {
-	let x = -40.5
-	let z = -184.5
-		RenderLib.drawInnerEspBox(x + -2, 74, z + 0, 1, 1, 1, 0, 0, 0.5, true)
-		RenderLib.drawInnerEspBox(x + 2, 74, z + 0, 1, 1, 1, 0, 0, 0.5, true)
-		RenderLib.drawInnerEspBox(x + 0, 74, z + -2, 1, 1, 1, 0, 0, 0.5, true)
-		RenderLib.drawInnerEspBox(x + 0, 74, z + 2, 1, 1, 1, 0, 0, 0.5, true)
-})
-/*
-register("renderWorld", () => {
-		for (let dx = -25; dx > -186; dx += -32) {
-		for (let dz = -41; dz > -202; dz += -32) {
-	RenderLib.drawInnerEspBox(dx - -0.5, 70, dz - -0.5, 1, 1, 1, 0, 0, 0.5, true)
-			}
-	}
-		for (let dx = -41; dx > -202; dx += -32) {
-		for (let dz = -25; dz > -186; dz += -32) {
-	RenderLib.drawInnerEspBox(dx - -0.5, 70, dz - -0.5, 1, 1, 1, 0, 0, 0.5, true)
-			}
-	}
-})
-*/
