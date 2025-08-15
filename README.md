@@ -1,5 +1,5 @@
 # diddyaddons
-this is a very cool ChatTriggers module for Minecraft
+this is a very cool ChatTriggers module for Minecraft  
 requires Odin (1.3.0+ probably)
 
 features:  
