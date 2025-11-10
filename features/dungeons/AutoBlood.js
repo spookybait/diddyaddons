@@ -67,7 +67,7 @@ function onEntityDestroyed(mcEntity) {
 	if (dx === 0 && dy === 0 && dz === 0 && (mcEntity.field_70165_t % 1 + 1) % 1 === 0.5 && (mcEntity.field_70161_v % 1 + 1) % 1 === 0.5) return;
 	++spawnedMobs;
 	if (spawnedMobs <= 4) return;
-	if (!dungeonUtils.INSTANCE.currentRoomName == "Blood") return;
+	if (dungeonUtils.INSTANCE.currentRoomName != "Blood") return;
 	let [yaw, pitch] = getYawPitch(mcEntity.field_70165_t + dx - Player.getX(), mcEntity.field_70163_u + dy + 1 - Player.getY(), mcEntity.field_70161_v + dz - Player.getZ());
 	if (reportRotation) return;
 	if (Settings().AutoBloodCampRotations) { snapTo(yaw, pitch) }

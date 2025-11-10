@@ -1,9 +1,9 @@
 import Settings from "../../config"
 import { getDoors, getMiddleofBlood } from "../utils/MapUtils"
-import { getDistance2D, getDistance, calcYawPitch, Prefix, snapTo, S08PacketPlayerPosLook, swapToItem, swapToItemSbID, rightClick, C08PacketPlayerBlockPlacement, S08PacketPlayerPosLook, scheduleTask, C09PacketHeldItemChange, useAotv } from "../utils/Utils"
+import { getDistance2D, getDistance, calcYawPitch, Prefix, snapTo, S08PacketPlayerPosLook, swapToItem, swapToItemSbID, rightClick, C08PacketPlayerBlockPlacement, S08PacketPlayerPosLook, scheduleTask, C09PacketHeldItemChange, useAotv, C03PacketPlayer } from "../utils/Utils"
 import { doPearlclip } from "../utils/pearlclip"
+import deathTick from "../utils/deathTicks"
 import Listener from "../utils/Listeners"
-import RenderLib from "RenderLibV2J"
 
 //const inSingleplayer = () => Client.getMinecraft().func_71356_B()
 let doorFound = false
@@ -11,7 +11,6 @@ let coords = []
 let hudText = new Text("").setShadow(true).setAlign('CENTER')
 
 register("chat", () => {
-	if (!Settings().AutoBloodRush) return;
 	dungeonEntered.register()
 	setTimeout( () => { dungeonEntered.unregister() }, 20000)
 }).setCriteria(/^-*->newLine<-(\[.+\] |)\w* entered (MM |)The Catacombs, Floor (IX|IV|V?I{0,3})!->newLine<--*/)
@@ -57,11 +56,8 @@ const autoBRtrigger = register("chat", () => {
 	if (!doorFound) return;
 	if (!coords) return;
 	hudText.setString("Attempting to teleport.")
-	setTimeout( () => {
 	attemptAutoBR.register()
 	inBlood.register()
-	}, Settings().AutoBRDeathTicks * 50)
-
 }).setCriteria("Starting in 1 second.").setStart()
 /*
 register("command", () => {
@@ -87,9 +83,7 @@ register("chat", () => {
 	running = true
 	scheduleTask(5, () => { running = false })
 	hudText.setString("Attempting to load more chunks.")
-	Listener.schedule(1, () => {
 	goToMiddle.register()
-	}, 50)
 }).setCriteria(Player.getName() + " is now ready!").setStart()
 
 
@@ -100,6 +94,8 @@ function getAotvUses(num) {
 
 const attemptAutoBR = register("tick", () => {
 	if (!Settings().AutoBloodRush) return;
+	const delay = Settings().AutoBRDeathTicks ?? 20
+	if (deathTick.ticks < delay) return;
 	attemptAutoBR.unregister()
 	goDown()
 	//if (inSingleplayer) Client.scheduleTask(50, () => { ChatLib.command("tp @p -188.5 72 -56.5")})
@@ -107,6 +103,8 @@ const attemptAutoBR = register("tick", () => {
 
 const goToMiddle = register("tick", () => {
 	if (!Settings().AutoBloodRush) return;
+	const delay = Settings().AutoBRDeathTicks ?? 20
+	if (deathTick.ticks < delay) return;
 	goToMiddle.unregister()
 	goDown(true)
 	//if (inSingleplayer) Client.scheduleTask(20, () => { ChatLib.command("tp @p -188.5 72 -56.5")})

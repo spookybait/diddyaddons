@@ -4,6 +4,7 @@ import leapUtils from "../utils/leapUtils"
 import { isPlayerInBox, rightClick, MouseEvent, getHeldItemID, getNameByClass, removeUnicode, Prefix } from "../utils/Utils";
 
 let lastOpener
+// this is just cyan fastleap
 
 register("chat", (player, event) => {
     lastOpener = player

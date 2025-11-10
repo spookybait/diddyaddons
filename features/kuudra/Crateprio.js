@@ -1,13 +1,12 @@
 import Settings from "../../config"
 import { data } from "../utils/Data"
+import { huds } from "../../command";
 
-const missingHud = new Gui()
 const COLOR = '&d&l'
 const base = '&d'
 
 let missing = ""
 let pre = undefined
-let hudText = new Text("").setShadow(true).setAlign('CENTER')
 
 
 
@@ -230,51 +229,13 @@ const missingCrateTrigger = register("chat", (player, crate) => {
   }
 }).setCriteria('Party > ${player}: No ${crate}!').unregister()
 
+
+
 const missingHudRender = register("renderOverlay", () => {
-	hudText.setScale(data.hudTextCoords.scale)
-	hudText.setString(`&cMissing: &b${missing}&r`)
-	hudText.draw(data.hudTextCoords.x, data.hudTextCoords.y)
+	huds["missinghud"].instance.draw(`&cMissing: &b${missing}&r`)
 }).unregister()
 
 register("worldLoad", () => {
 	missingHudRender.unregister()
 	missingCrateTrigger.unregister()
 })
-
-const editHudTrigger = register("renderOverlay", () => {
-	    hudText.setScale(data.hudTextCoords.scale)
-        hudText.setString(`&cMissing: &bbackshots?&r`)
-        hudText.draw(data.hudTextCoords.x, data.hudTextCoords.y)
-}).unregister()
-
-const dragTrigger = register("dragged", (dx, dy, x, y, bn) => {
-	if (bn == 2) return
-	data.hudTextCoords.x = x
-	data.hudTextCoords.y = y
-	data.save()
-}).unregister()
-
-const scrollTrigger = register("scrolled", (x, y, dir) => {
-	if (dir == 1) data.hudTextCoords.scale += 0.05
-	else data.hudTextCoords.scale -= 0.05
-	data.save()
-}).unregister()
-
-const guiClosedTrigger = register("guiClosed", () => {
-	editHudTrigger.unregister()
-	dragTrigger.unregister()
-	scrollTrigger.unregister()
-	guiClosedTrigger.unregister()
-}).unregister()
-
-function enableMissingHudEdit() {
-	editHudTrigger.register()
-	dragTrigger.register()
-	scrollTrigger.register()
-	missingHud.open()
-	setTimeout( () => { guiClosedTrigger.register() }, 50)
-}
-
-register("command", () => {
-	enableMissingHudEdit()
-}).setName("editmissinghud")

@@ -1,25 +1,12 @@
 import Settings from "../../config"
 import { data } from "../utils/Data"
-import { S32PacketConfirmTransaction, C08PacketPlayerBlockPlacement, C07PacketPlayerDigging, C09PacketHeldItemChange, S0FPacketSpawnMob, S1CPacketEntityMetadata, MCBlockPos, EnumFacing, releaseRightClick, pressRightClick, MouseEvent, getHeldItemID, getDistance2D, isPlayerInBox, getClass, swapToItemSbID, mc } from "../utils/Utils"
+import { S32PacketConfirmTransaction, C08PacketPlayerBlockPlacement, C07PacketPlayerDigging, C09PacketHeldItemChange, S0FPacketSpawnMob, S1CPacketEntityMetadata, MCBlockPos, EnumFacing, releaseRightClick, pressRightClick, MouseEvent, getHeldItemID, getDistance2D, isPlayerInBox, getClass, swapToItemSbID, scheduleTask } from "../utils/Utils"
 import tick from "../utils/Listeners"
+import RenderLib from "RenderLibV2J"
 
 let lcmacModule = null
 
-const lcmacFunctions = `
-export function enable() {
-	autoClicking = true
-	clicker()
-}
-export function disable() {
-	autoClicking = false
-}`
-
 if (FileLib.exists("lcmac", "metadata.json")) {
-	if (!data.lcmacFixed) {
-		FileLib.append("lcmac", "index.js", lcmacFunctions)
-		data.lcmacFixed = true
-		data.save()
-	}
 	lcmacModule = require("../../../lcmac/index");
 }
 let dragonsSpawned = 0
@@ -28,9 +15,12 @@ let safety = false
 let firing = false;
 let inP5 = false;
 let ticks = 0;
+let spawnTicks = 0
 let initialSlot = -1;
 let initialItemStack = null;
 let dragonID = null
+let currentDragon = null
+/*
 const boxes = [
     { xMin: 75, yMin: 5, zMin: 70,  xMax: 105, yMax: 28, zMax: 38 },
     { xMin: 76, yMin: 5, zMin: 108, xMax: 102, yMax: 28, zMax: 78 },
@@ -38,6 +28,24 @@ const boxes = [
 	{ xMin: 36, yMin: 5, zMin: 107, xMax: 6, yMax: 28, zMax: 82 },
 	{ xMin: 33, yMin: 5, zMin: 43,  xMax: 8, yMax: 28, zMax: 76 }
 ];
+*/
+const dragons = {
+	"Red": { state: "DEAD", coords: new Vec3i(27.0, 14.0, 59.0), id: null },
+	"Orange": { state: "DEAD", coords: new Vec3i(85.0, 14.0, 56.0), id: null }, 
+	"Green": { state: "DEAD", coords: new Vec3i(27.0, 14.0, 94.0), id: null },
+	"Blue": { state: "DEAD", coords: new Vec3i(84.0, 14.0, 94.0), id: null },
+	"Purple": { state: "DEAD", coords: new Vec3i(56.0, 14.0, 125.0), id: null }
+	}
+/*
+register("renderWorld", () => {
+	RenderLib.drawEspBox(27, 14, 59, 1, 1, 1, 0, 0, 1, true)
+	RenderLib.drawEspBox(85.0, 14.0, 56.0, 1, 1, 1, 0, 0, 1, true)
+	RenderLib.drawEspBox(27.0, 14.0, 94.0, 1, 1, 1, 0, 0, 1, true)
+	RenderLib.drawEspBox(84.0, 14.0, 94.0, 1, 1, 1, 0, 0, 1, true)
+	RenderLib.drawEspBox(56.0, 14.0, 125.0, 1, 1, 1, 0, 0, 1, true)
+})
+*/
+
 
 register(MouseEvent, (event) => {
 	if (!Settings().LBMacro) return;
@@ -65,11 +73,65 @@ register("worldLoad", () => {
 	inP5 = false
 	debuffTrigger.unregister()
 	deathTrigger.unregister()
+	dragonChecker.unregister()
 	dragonID = null
+	for (let key in dragons) {
+    dragons[key].state = "DEAD"
+	dragons[key].id = null
+		}
 })
+
+const dragonUtils = Java.type("me.odinmain.features.impl.floor7.WitherDragonsEnum")
+
+const dragonChecker = register("tick", (ticks) => {
+	if (ticks % 20 !== 0) return;
+	let hasRun = false
+	dragonUtils.entries.forEach(dragon => {
+		if (dragon.name() == "None") return;
+			const dragonName = dragons[dragon.name()]
+		if (dragon.timeToSpawn >= 100 || dragon.timeToSpawn == 0 || dragonName.state != "DEAD") return;
+			spawnTicks = dragon.timeToSpawn
+			dragonName.state = "SPAWNING"
+			console.log(`${dragon.name()} is spawning`)
+			console.log(spawnTicks)
+		if (hasRun) return;
+		hasRun = true
+		console.log("surely this only ran once")
+		tick.addListener(dragonTimer)
+		
+		
+	})
+})
+
+register("command", () => {
+		const test = new Vec3i(27.0, 14.0, 59.0)
+		const test2 = new Vec3i(Player.getX(), Player.getY(), Player.getZ())
+		console.log(test.compareTo(test2))
+}).setName("dragontest")
+
+function dragonTimer() {
+	if (spawnTicks <= 0) {
+		tick.removeListener(dragonTimer)
+		return;
+	}
+	spawnTicks--
+	if (spawnTicks == 14) {
+		scheduleTask(0, () => { ChatLib.chat("Swapping to Bouquet") })
+		scheduleTask(1, () => { ChatLib.chat("Swapping back to lb") })
+		return;
+	}
+	if (spawnTicks == 5) {
+		scheduleTask(0, () => { ChatLib.chat("Swapping to Bouquet again") })
+		scheduleTask(1, () => { ChatLib.chat("Swapping to Ice Spray") })
+		return;
+	}
+
+}
+
 
 register("chat", () => {
 	inP5 = true
+	dragonChecker.register()
 	if (!Settings().AutoDebuff) return;
 	debuffTrigger.register()
 }).setCriteria("[BOSS] Wither King: You... again?")
@@ -82,40 +144,61 @@ const debuffTrigger = register("packetReceived", (packet, event) => {
 	if (!inP5) return; // should never happen
 	const entityID = packet.func_149024_d()
 	const entityX = packet.func_149023_f() / 32 
+	const entityY = packet.func_149034_g() / 32
 	const entityZ = packet.func_149029_h() / 32 // why is this a thing
-	
-	
+
 	if (packet.func_149025_e() !== 63) return;
-		if (getDistance2D(Player.getX(), Player.getZ(), entityX, entityZ) > 15) return;
+	const entityVec3 = new Vec3i(entityX, entityY, entityZ)
+		for (let key in dragons) {
+			if (dragons[key].coords.equals(entityVec3)) {
+			dragons[key].state = "ALIVE"
+			dragons[key].id = entityID
+			console.log(`${key} is alive, Set ${key} id to ${entityID}`)
+			if (getDistance2D(Player.getX(), Player.getZ(), entityX, entityZ) > 6) continue;
+			currentDragon = key
+			ChatLib.chat(`${key} is being tracked`)
+			}
+		}
+		if (getDistance2D(Player.getX(), Player.getZ(), entityX, entityZ) > 6) return;
 		const currentClass = getClass()
-		if (currentClass !== "Mage" && currentClass !== "Tank" && currentClass !== "Healer") return;
-			for (let i = 0; i < boxes.length; i++) {
-				if (isPlayerInBox(boxes[i].xMin, boxes[i].yMin, boxes[i].zMin, boxes[i].xMax, boxes[i].yMax, boxes[i].zMax)) {
-				if (safety) return; // it should never get to this point where you are either in 2 boxes or this triggers multiple times but who knows
+		if (currentClass !== "Mage" && currentClass !== "Tank" && currentClass !== "Healer") return;			
+				if (safety) return; // it should never get to this point
 					safety = true 
 					Client.scheduleTask(10, () => { safety = false })
 					console.log(`Set dragonID to ${entityID}`)
 					dragonID = entityID
 					deathTrigger.register()
 					dragonsSpawned++
-					Client.scheduleTask(0, () => { swapToItemSbID("ICE_SPRAY_WAND", "STARRED_ICE_SPRAY_WAND")})
-					if (currentClass === "Mage") { Client.scheduleTask(2, () => {
-						eleaseRightClick()
+					scheduleTask(0, () => { swapToItemSbID("ICE_SPRAY_WAND", "STARRED_ICE_SPRAY_WAND")})
+					if (currentClass === "Mage") { scheduleTask(2, () => {
+						releaseRightClick()
 						swapToItemSbID("STARRED_MIDAS_SWORD", "DARK_CLAYMORE")
 							if (data.lcmac && lcmacModule) lcmacModule.enable()
-					})} else Client.scheduleTask(2, () => { swapToItemSbID("SOUL_WHIP", "FLAMING_FLAY")})
-    }
-}
+					})} else scheduleTask(2, () => { swapToItemSbID("SOUL_WHIP", "FLAMING_FLAY")})
 }).setFilteredClass(S0FPacketSpawnMob).unregister()
 
 const deathTrigger = register("packetReceived", (packet, event) => {
-	if (packet.func_149375_d() !== dragonID) return;
-	if (!dragonID) return;
+	const entityID = packet.func_149375_d()
 	const watcherData = packet.func_149376_c()
+	for (let key in dragons) {
+		if (entityID == dragons[key].id)
+		watcherData.forEach(data => {
+		if (data.func_75672_a() !== 6) return;
+		if (data.func_75669_b() <= 0) {
+			dragons[key].state = "DEAD"
+			dragons[key].id = null
+			console.log(`${key} is dead, Set ${key} id to null`)
+			if (currentDragon != key) return;
+			ChatLib.chat("Releasing right click")
+		}
+		})
+	}
+	if (entityID !== dragonID) return;
+	if (!dragonID) return;
 	watcherData.forEach(data => {
 	if (data.func_75672_a() !== 6) return;
 	if (data.func_75669_b() <= 0) {
-		Client.scheduleTask(0, () => { 
+		scheduleTask(0, () => { 
 		releaseRightClick()
 		if (data.lcmac && lcmacModule) lcmacModule.disable()
 		})
@@ -126,7 +209,6 @@ const deathTrigger = register("packetReceived", (packet, event) => {
 }).setFilteredClass(S1CPacketEntityMetadata).unregister()
 
 const hotbarSwap = register("packetSent", () => {
-	console.log("swapped")
 	hotbarSwap.unregister()
 	if (Settings().AutoDebuff && inP5) return;
 	lastRelease()

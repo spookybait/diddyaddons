@@ -18,14 +18,20 @@ export const data = new PogObject(
     funny: false,
 	lcmac: false,
 	lcmacFixed: false,
+	fuckyouodin: false,
     // bad players.
-    badplayers: [],
+	cooldownHudBlacklist: [],
+	cooldownHudCoords: {
+			x: Renderer.screen.getWidth() / 2,
+			y: Renderer.screen.getHeight() / 2 + 10,
+			scale: 1,
+		},
 	hudTextCoords: {
 			x: Renderer.screen.getWidth() / 2,
 			y: Renderer.screen.getHeight() / 2 + 10,
 			scale: 1,
 		},
-	sfcdTextCoords: {
+	sfcdHudCoords: {
 			x: Renderer.screen.getWidth() / 2,
 			y: Renderer.screen.getHeight() / 2 + 10,
 			scale: 1,

@@ -1,4 +1,5 @@
 import Settings from "../../config";
+import { playSound } from "../utils/Utils";
 
 let inp3 = false;
 const currentTitle = { title: null, time: null };
@@ -53,12 +54,8 @@ const showTitle = (name, msg) => {
         
         currentTitle.time = 2500;
         started = Date.now();
-		  	try {
-        new net.minecraft.network.play.server.S29PacketSoundEffect("random.orb", Player.getX(), Player.getY(), Player.getZ(), 2, 0.5).func_148833_a(Client.getConnection())
-			} catch (e) { 
-				console.log(e)
+		playSound("random.orb", 0.5, 2)
     }
-	}
 };
 
 register("chat", (rank, name, msg) => {

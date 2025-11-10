@@ -9,7 +9,7 @@ const listeners = global.soshimee.events.tick.listeners ??= [];
 
 const listenersByClass = new Map();
 
-const trigger = global.soshimee.events.tick.trigger ??= register("packetReceived", packet => {
+const trigger = register("packetReceived", packet => {
     try {
         if (!packet) return;
         const packetClass = packet.getClass().getName();

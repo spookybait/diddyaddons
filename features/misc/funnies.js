@@ -20,13 +20,11 @@ register("command", () => {
 	
 }).setName("funny")
 
-register("command", () => {
-	Client.scheduleTask(0, () => {
-		Client.sendPacket(new C08PacketPlayerBlockPlacement(Player.getHeldItem()?.getItemStack()));	
-		Client.sendPacket(new C08PacketPlayerBlockPlacement(Player.getHeldItem()?.getItemStack()));
-	})
-}).setName("mosquito")
-
+register("packetSent", (packet, event) => {
+	if (!data.fuckyouodin) return;
+	const message = packet.func_149439_c()
+	if (message == "/odingetpingcommand-----") cancel(event)
+}).setFilteredClass(C01PacketChatMessage)
 
 register("playerInteract", (action, player, event) => {
         if (!data.funny) return;

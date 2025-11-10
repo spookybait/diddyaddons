@@ -14,6 +14,8 @@ export const C08PacketPlayerBlockPlacement = Java.type("net.minecraft.network.pl
 export const C09PacketHeldItemChange = Java.type("net.minecraft.network.play.client.C09PacketHeldItemChange")
 export const C0APacketAnimation = Java.type("net.minecraft.network.play.client.C0APacketAnimation");
 export const C0EPacketClickWindow = Java.type("net.minecraft.network.play.client.C0EPacketClickWindow")
+export const C12PacketUpdateSign = Java.type("net.minecraft.network.play.client.C12PacketUpdateSign")
+export const S02PacketChat = Java.type("net.minecraft.network.play.server.S02PacketChat");
 export const S03PacketTimeUpdate = Java.type("net.minecraft.network.play.server.S03PacketTimeUpdate");
 export const S08PacketPlayerPosLook = Java.type("net.minecraft.network.play.server.S08PacketPlayerPosLook");
 export const S0FPacketSpawnMob = Java.type("net.minecraft.network.play.server.S0FPacketSpawnMob");
@@ -21,15 +23,32 @@ export const S13PacketDestroyEntities = Java.type("net.minecraft.network.play.se
 export const S19PacketEntityStatus = Java.type("net.minecraft.network.play.server.S19PacketEntityStatus")
 export const S1CPacketEntityMetadata = Java.type("net.minecraft.network.play.server.S1CPacketEntityMetadata")
 export const S21PacketChunkData = Java.type("net.minecraft.network.play.server.S21PacketChunkData")
-export const S32PacketConfirmTransaction = Java.type("net.minecraft.network.play.server.S32PacketConfirmTransaction")
-export const S2FPacketSetSlot = Java.type("net.minecraft.network.play.server.S2FPacketSetSlot")
+export const S29PacketSoundEffect = Java.type("net.minecraft.network.play.server.S29PacketSoundEffect")
 export const S2DPacketOpenWindow = Java.type("net.minecraft.network.play.server.S2DPacketOpenWindow")
+export const S2FPacketSetSlot = Java.type("net.minecraft.network.play.server.S2FPacketSetSlot")
+export const S32PacketConfirmTransaction = Java.type("net.minecraft.network.play.server.S32PacketConfirmTransaction")
+export const S33PacketUpdateSign = Java.type("net.minecraft.network.play.server.S33PacketUpdateSign")
+/*
+register("guiMouseClick", (gx, gy, button, gui, event) => {
+
+		if(Client.currentGui.getClassName().toString().includes("GuiEditSign")){
+			const tileSign = gui.class.getDeclaredField("field_146848_f");
+        tileSign.setAccessible(true);
+        let currentTileSign = tileSign.get(Client.currentGui.get());
+        currentTileSign.field_145915_a[0] = new ChatComponentText("test");
+        //close inv
+		}
+})
+*/
+
 
 export const MouseEvent = Java.type("net.minecraftforge.client.event.MouseEvent")
 
 export const EntityArmorStand = Java.type("net.minecraft.entity.item.EntityArmorStand");
 export const MCBlockPos = Java.type("net.minecraft.util.BlockPos");
 export const EnumFacing = Java.type("net.minecraft.util.EnumFacing");
+export const MCBlock = Java.type("net.minecraft.block.Block");
+export const ChatComponentText = Java.type("net.minecraft.util.ChatComponentText")
 
 const Mouse = Java.type("org.lwjgl.input.Mouse")
 
@@ -39,18 +58,17 @@ export function leftClick() {
     const leftClickMethod = Client.getMinecraft().getClass().getDeclaredMethod("func_147116_af", null)
     leftClickMethod.setAccessible(true);
     leftClickMethod.invoke(Client.getMinecraft(), null)
-    
 }
+
 export function rightClick() {
     const rightClickMethod = Client.getMinecraft().getClass().getDeclaredMethod("func_147121_ag", null)
     rightClickMethod.setAccessible(true);
     rightClickMethod.invoke(Client.getMinecraft(), null);
-
 }
 
 export function setSwapping() {
 	isSwapping = true
-	Client.scheduleTask(0, () => { isSwapping = false })
+	scheduleTask(0, () => { isSwapping = false })
 }
 
 export function swapToSlot(slot) {
@@ -129,13 +147,18 @@ register("worldUnload", () => {
 	aotvsUsed = 0
 })
 
-export function playSound(sound, volume, pitch) {
+register("command", (yaw, pitch) => {
+	snapTo(yaw, pitch)
+}).setName("snapto")
+
+export function playSound(sound, pitch = 1, volume = 1) {
 	// super cool playSound that doesnt crash your game or not work half the time thanks serenity
 	try {
-        new net.minecraft.network.play.server.S29PacketSoundEffect(sound, Player.getX(), Player.getY(), Player.getZ(), volume, pitch).func_148833_a(Client.getConnection())
+        new S29PacketSoundEffect(sound, Player.getX(), Player.getY(), Player.getZ(), volume, pitch).func_148833_a(Client.getConnection())
 			} catch (e) { 
 				console.log(e)
 }}
+
 
 export function snapTo(yaw, pitch) {
 	if (Number.isNaN(yaw) || Number.isNaN(pitch)) return;

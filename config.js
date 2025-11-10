@@ -6,6 +6,13 @@ const config = new DefaultConfig("diddyaddons", "data/settings.json")
 config
 .addSwitch({
     category: "Dungeons",
+    configName: "ZeroPingDungeonbreaker",
+    title: "Zero Ping Dungeonbreaker",
+    description: "stupid dumbshit fuck you hypixel",
+    subcategory: "General"
+})
+.addSwitch({
+    category: "Dungeons",
     configName: "NoInteractPearl",
     title: "Cancel Pearl Interact",
     description: "Cancels interactions on all blocks while holding Ender Pearls. This allows them to be thrown while looking at blocks which Hypixel normally prevents.",
@@ -27,6 +34,7 @@ config
     subcategory: "General"
 })
 */
+/*
 .addSwitch({
     category: "Dungeons",
     configName: "SwapStonk",
@@ -46,6 +54,7 @@ config
 	return settings.SwapStonk
     },
 })
+*/
 .addSwitch({
     category: "Dungeons",
     configName: "PearlGFSBind",
@@ -83,7 +92,14 @@ config
 	shouldShow: settings => {
 	return settings.AutoBloodCamp
 	},
+}).addSwitch({
+    category: "Dungeons",
+    configName: "AutoFireFreeze",
+    title: "Auto Fire Freeze",
+    description: "Automatically casts fire freeze at the right time in the M3 boss.",
+    subcategory: "M3"
 })
+/*
 .addSwitch({
     category: "Dungeons",
     configName: "AutoBloodRush",
@@ -95,10 +111,10 @@ config
     category: "Dungeons",
     configName: "AutoBRDeathTicks",
     title: "Tick Delay",
-    description: "Delay before attempting to Auto Blood Rush to avoid death barrier",
+    description: "Threshold for death ticks. If you keep dying to the death barrier increase this setting.",
     subcategory: "General",
 	options: [1, 40],
-    value: 14,
+    value: 20,
     shouldShow: settings => {
 	return settings.AutoBloodRush
     },
@@ -119,13 +135,12 @@ config
     category: "Dungeons",
     configName: "AutoBloodRushPing",
     title: "High Ping",
-    description: "Makes pearling into blood work on high ping, enable if you are above 150 ping",
+    description: "Makes pearling into blood work on high ping, Use this if you are 100+ ping",
     subcategory: "General",
 	shouldShow: settings => {
 	return settings.AutoBloodRush
     },
 })
-/*
 .addSwitch({
     category: "Dungeons",
     configName: "AutoGrabPot",
@@ -153,7 +168,6 @@ config
     description: "Alerts you when someone you have added to the list joins your party.",
     subcategory: "Party Finder",
 })
-*/
 .addSwitch({
     category: "Dungeons",
     configName: "bonzoStop",
@@ -161,6 +175,7 @@ config
     description: "Stops movement after clicking with bonzo staff for a short period",
     subcategory: "P3"
 })
+*/
 .addSwitch({
     category: "Fast Leap",
     configName: "FastLeap",
@@ -377,6 +392,7 @@ config
     description: "Shows stack spots in p5",
     subcategory: "P5"
 })
+/*
 .addSwitch({
     category: "Dungeons",
     configName: "LBMacro",
@@ -415,6 +431,7 @@ config
     description: "Auto swaps to Ice Spray and then Soul Whip/Flaming Flay upon a dragon spawning.",
     subcategory: "P5"
 })
+*/
 .addSwitch({
     category: "QoL",
     configName: "QuickBackpackBind",
@@ -425,17 +442,19 @@ config
 .addSwitch({
     category: "QoL",
     configName: "sfcd",
-    title: "Shadow Fury Ccooldown Display",
-    description: "Shows Shadow Fury Cooldown, change location with /editsfcdhud",
+    title: "Shadow Fury Cooldown Display",
+    description: "Shows Shadow Fury cooldown, change location with /diddy edit sfcdhud",
     subcategory: "General"
 })
+/*
 .addSwitch({
     category: "QoL",
-    configName: "KeepSprint",
-    title: "Keep Sprint",
-    description: "Keeps sprint when hitting an entity",
+    configName: "cooldownHud",
+    title: "Global Cooldown Display",
+    description: "Shows all cooldowns, change location with /diddy edit cooldownhud",
     subcategory: "General"
 })
+*/
 .addSwitch({
     category: "QoL",
     configName: "NoHitDelay",
@@ -449,6 +468,20 @@ config
     title: "Mining Ability Alert",
     description: "Plays a sound when your pickaxe ability comes off cooldown",
     subcategory: "General"
+})
+.addSwitch({
+    category: "QoL",
+    configName: "AutoFeroSwap",
+    title: "Auto Ferocity Swap",
+    description: "Swaps to Daedalus blade when ferocity procs from huntaxe to get GDrag MF",
+    subcategory: "Diana"
+})
+.addSwitch({
+    category: "QoL",
+    configName: "AutoSphinx",
+    title: "Auto Sphinx Answer",
+    description: "Automatically answers sphinx questions",
+    subcategory: "Diana"
 })
 .addSwitch({
     category: "Kuudra",
@@ -471,7 +504,7 @@ config
     category: "Kuudra",
     configName: "MissingCrateHud",
     title: "Missing Crate HUD",
-    description: "Shows the missing supply crate on screen, Change location and scale with /editmissinghud",
+    description: "Shows the missing supply crate on screen, Change location and scale with /diddy edit missinghud",
     subcategory: "Supplies"
 })
 
