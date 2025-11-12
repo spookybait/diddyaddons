@@ -54,7 +54,10 @@ function getLeap() {
         } else if (isPlayerInBox(105, 25, 25, 7, 0, 150)) {
             let leapClass = getNameByClass(Settings().P5Leap);
             leapString = (leapClass === -1 || leapClass === "EMPTY") ? Settings().P5Leap : leapClass;
-        }
+        } else if (isPlayerInBox(-200, 0, -200, -9, 200, -9)) {
+			let leapClass = getNameByClass(Settings().ClearLeap);
+            leapString = (leapClass === -1 || leapClass === "EMPTY") ? Settings().ClearLeap : leapClass;
+		}
     }
 
     return leapString;

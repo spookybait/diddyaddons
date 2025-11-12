@@ -199,6 +199,15 @@ config
 })
 .addTextInput({
     category: "Fast Leap",
+    configName: "ClearLeap",
+    title: "Clear Leap",
+    description: "Leap to this player in Clear (Turn off leap to last door opener)",
+    value: "",
+    placeHolder: "",
+    subcategory: "Leap"
+})
+.addTextInput({
+    category: "Fast Leap",
     configName: "P1Leap",
     title: "P1 Leap",
     description: "Leap to this player in P1",
@@ -392,7 +401,6 @@ config
     description: "Shows stack spots in p5",
     subcategory: "P5"
 })
-/*
 .addSwitch({
     category: "Dungeons",
     configName: "LBMacro",
@@ -431,7 +439,6 @@ config
     description: "Auto swaps to Ice Spray and then Soul Whip/Flaming Flay upon a dragon spawning.",
     subcategory: "P5"
 })
-*/
 .addSwitch({
     category: "QoL",
     configName: "QuickBackpackBind",
@@ -446,7 +453,6 @@ config
     description: "Shows Shadow Fury cooldown, change location with /diddy edit sfcdhud",
     subcategory: "General"
 })
-/*
 .addSwitch({
     category: "QoL",
     configName: "cooldownHud",
@@ -454,7 +460,6 @@ config
     description: "Shows all cooldowns, change location with /diddy edit cooldownhud",
     subcategory: "General"
 })
-*/
 .addSwitch({
     category: "QoL",
     configName: "NoHitDelay",
@@ -473,7 +478,7 @@ config
     category: "QoL",
     configName: "AutoFeroSwap",
     title: "Auto Ferocity Swap",
-    description: "Swaps to Daedalus blade when ferocity procs from huntaxe to get GDrag MF",
+    description: "Swaps to Daedalus blade when ferocity procs from huntaxe to get Gdrag MF",
     subcategory: "Diana"
 })
 .addSwitch({
