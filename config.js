@@ -400,8 +400,8 @@ config
     title: "Stack Spots",
     description: "Shows stack spots in p5",
     subcategory: "P5"
-/*
 })
+/*
 .addSwitch({
     category: "Dungeons",
     configName: "LBMacro",
