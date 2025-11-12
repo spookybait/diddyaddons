@@ -400,6 +400,7 @@ config
     title: "Stack Spots",
     description: "Shows stack spots in p5",
     subcategory: "P5"
+/*
 })
 .addSwitch({
     category: "Dungeons",
@@ -439,6 +440,7 @@ config
     description: "Auto swaps to Ice Spray and then Soul Whip/Flaming Flay upon a dragon spawning.",
     subcategory: "P5"
 })
+*/
 .addSwitch({
     category: "QoL",
     configName: "QuickBackpackBind",
@@ -453,6 +455,7 @@ config
     description: "Shows Shadow Fury cooldown, change location with /diddy edit sfcdhud",
     subcategory: "General"
 })
+/*
 .addSwitch({
     category: "QoL",
     configName: "cooldownHud",
@@ -460,6 +463,7 @@ config
     description: "Shows all cooldowns, change location with /diddy edit cooldownhud",
     subcategory: "General"
 })
+*/
 .addSwitch({
     category: "QoL",
     configName: "NoHitDelay",
@@ -514,5 +518,6 @@ config
 })
 
 const setting = new Settings("diddyaddons", config, "data/scheme-nwjn.json") // make sure to set your command with [.setCommand("commandname")]
+
 
 export default () => setting.settings
